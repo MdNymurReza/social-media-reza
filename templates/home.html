@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/" class="logo">Platform</a>
+            <ul>
+                <li><a href="/login">Login</a></li>
+                <li><a href="/register">Register</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div class="hero">
+            <h1>Welcome to Our Platform</h1>
+            <p>Discover amazing features, connect with friends, and manage your profile with ease.</p>
+            <div class="button-container">
+                <a href="/login" class="button button-primary">Login</a>
+                <a href="/register" class="button button-secondary">Register</a>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2024 Platform. All rights reserved.</p>
+    </footer>
+</body>
+</html>

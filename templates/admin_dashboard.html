@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="header">
+            <h1>Admin Dashboard</h1>
+        </header>
+        <main class="content">
+            <div class="card-container">
+                <a href="{{ url_for('generate_id') }}" class="card">
+                    <h2>Generate ID</h2>
+                    <p>Create new IDs for users.</p>
+                </a>
+                <a href="{{ url_for('admin_view_users') }}" class="card">
+                    <h2>View Users</h2>
+                    <p>See the list of all registered users.</p>
+                </a>
+                <a href="{{ url_for('view_all_ids') }}" class="card">
+                    <h2>View All IDs</h2>
+                    <p>Review all generated IDs.</p>
+                </a>
+                <a href="{{ url_for('unregistered_ids') }}" class="card">
+                    <h2>Unregistered IDs</h2>
+                    <p>Manage IDs that are not yet registered.</p>
+                </a>
+            </div>
+            <a href="{{ url_for('admin_panel') }}" class="logout-button">Logout</a>
+        </main>
+    </div>
+</body>
+</html>

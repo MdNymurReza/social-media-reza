@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Unique ID</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/generate_id.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Generate Unique ID</h1>
+        <form method="post" action="{{ url_for('generate_id') }}">
+            <div class="form-group">
+                <label for="unique_id">Unique ID:</label>
+                <input type="text" id="unique_id" name="unique_id" placeholder="Enter ID here" required>
+            </div>
+            <button type="submit" class="button">Generate</button>
+        </form>
+        <a href="{{ url_for('admin_dashboard') }}" class="back-button">Back to Dashboard</a>
+    </div>
+</body>
+</html>

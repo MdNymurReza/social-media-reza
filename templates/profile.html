@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header class="profile-header">
+            <img src="{{ url_for('static', filename='uploads/' ~ user.profile_picture) }}" alt="Profile Picture" class="profile-picture" id="profile-pic-preview">
+            <div class="profile-info">
+                <h1>{{ user.full_name }}</h1>
+                <p class="username">{{ user.username }}</p>
+                <p class="university">{{ user.university }}</p>
+                <p class="bio">{{ user.bio }}</p>
+                <div class="social-links">
+                    <a href="{{ user.facebook_link }}" target="_blank" class="social-link">Facebook</a>
+                    <a href="{{ user.twitter_link }}" target="_blank" class="social-link">Twitter</a>
+                    <a href="{{ user.linkedin_link }}" target="_blank" class="social-link">LinkedIn</a>
+                </div>
+            </div>
+        </header>
+        <form method="post" action="{{ url_for('profile') }}" enctype="multipart/form-data" class="profile-form">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="{{ user.email }}" required>
+
+            <label for="university">University:</label>
+            <input type="text" id="university" name="university" value="{{ user.university }}" required>
+
+            <label for="bio">Bio:</label>
+            <textarea id="bio" name="bio">{{ user.bio }}</textarea>
+
+            <label for="facebook_link">Facebook Link:</label>
+            <input type="text" id="facebook_link" name="facebook_link" value="{{ user.facebook_link }}">
+
+            <label for="twitter_link">Twitter Link:</label>
+            <input type="text" id="twitter_link" name="twitter_link" value="{{ user.twitter_link }}">
+
+            <label for="linkedin_link">LinkedIn Link:</label>
+            <input type="text" id="linkedin_link" name="linkedin_link" value="{{ user.linkedin_link }}">
+
+            <label for="profile_picture">Profile Picture:</label>
+            <input type="file" id="profile_picture" name="profile_picture" accept="image/*" onchange="previewImage(event)">
+
+            <!-- <img id="profile-pic-preview" class="profile-picture-preview" src="{{ url_for('static', filename='uploads/' ~ user.profile_picture) }}" alt="Profile Picture Preview"> -->
+
+            <button type="submit" class="submit-btn">Update Profile</button>
+        </form>
+        <a href="{{ url_for('user_dashboard') }}" class="back-btn">Back to Dashboard</a>
+    </div>
+
+    <script>
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('profile-pic-preview').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+</body>
+</html>

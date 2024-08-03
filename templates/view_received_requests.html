@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Received Friend Requests</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/received_requests.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Received Friend Requests</h1>
+            <a href="{{ url_for('user_dashboard') }}" class="back-btn">Back to Dashboard</a>
+        </header>
+        <div class="requests-list">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sender ID</th>
+                        <th>Sender Name</th>
+                        <th>Sender Username</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for request in requests %}
+                    <tr>
+                        <td>{{ request.sender_id }}</td>
+                        <td>{{ request.full_name }}</td>
+                        <td>{{ request.username }}</td>
+                        <td>
+                            <a href="{{ url_for('accept_friend_request', request_id=request.id) }}" class="action-btn accept">Accept</a>
+                            <a href="{{ url_for('reject_friend_request', request_id=request.id) }}" class="action-btn reject">Reject</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

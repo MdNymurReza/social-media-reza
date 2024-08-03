@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View All IDs</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/view_all_ids.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>All IDs</h1>
+            <a href="{{ url_for('admin_dashboard') }}" class="back-button">Back to Dashboard</a>
+        </header>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Registered</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for id in all_ids %}
+                    <tr>
+                        <td>{{ id.unique_id }}</td>
+                        <td>{{ 'Yes' if id.is_registered else 'No' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

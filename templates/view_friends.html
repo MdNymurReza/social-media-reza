@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Friends</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/view_friends.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>My Friends</h1>
+            <a href="{{ url_for('user_dashboard') }}" class="back-btn">Back to Dashboard</a>
+        </header>
+        <div class="friends-list">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Full Name</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for friend in friends %}
+                    <tr>
+                        <td>{{ friend.id }}</td>
+                        <td>{{ friend.full_name }}</td>
+                        <td>{{ friend.username }}</td>
+                        <td>{{ friend.email }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

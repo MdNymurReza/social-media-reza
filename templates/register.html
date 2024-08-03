@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <h2>Register</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert {{ category }}">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <form action="{{ url_for('register') }}" method="POST" enctype="multipart/form-data">
+            <input type="text" name="unique_id" placeholder="Unique ID" required>
+            <input type="text" name="full_name" placeholder="Full Name" required>
+            <input type="text" name="username" placeholder="Username" required>
+            <select name="university" required>
+                <option value="">Select University</option>
+                <option value="United International University">United International University</option>
+                <option value="Southeast University">Southeast University</option>
+                <option value="Dhaka International University">Dhaka International University</option>
+                <option value="East-West University">East-West University</option>
+            </select>
+            <input type="email" name="email" placeholder="Email Address" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <div class="profile-pic-wrapper">
+                <img id="profilePicPreview" class="profile-pic-preview" src="path/to/default/image.png" alt="Profile Picture Preview">
+                <label class="profile-pic-label" for="profilePictureInput">Select Profile Picture</label>
+                <input type="file" id="profilePictureInput" name="profile_picture" accept="image/*" onchange="previewProfilePic()">
+            </div>
+            
+            <script>
+            function previewProfilePic() {
+                const fileInput = document.getElementById('profilePictureInput');
+                const preview = document.getElementById('profilePicPreview');
+            
+                if (fileInput.files && fileInput.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        preview.src = e.target.result;
+                    }
+                    reader.readAsDataURL(fileInput.files[0]);
+                }
+            }
+            </script>
+            
+            <button type="submit">Register</button>
+        </form>
+        <div class="navigation">
+            <a href="{{ url_for('login') }}">Already have an account? Login here</a>
+        </div>
+    </div>
+</body>
+
+</html>

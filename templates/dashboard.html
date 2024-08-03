@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <a href="{{ url_for('profile') }}" class="sidebar-link">Edit Profile</a>
+            <a href="{{ url_for('view_friends') }}" class="sidebar-link">View Friends</a>
+            <a href="{{ url_for('view_received_requests') }}" class="sidebar-link">View Friend Requests</a>            
+            
+            <a href="{{ url_for('logout') }}" class="sidebar-link logout-btn">Logout</a>
+        </aside>
+        <main class="main-content">
+            <header class="header">
+                <h1>User Dashboard</h1>
+            </header>
+            <div class="profile">
+                <div class="profile-header">
+                    <img src="{{ url_for('static', filename='uploads/' ~ user.profile_picture) }}" alt="Profile Picture" class="profile-picture">
+                    <div class="profile-info">
+                        <h2>{{ user.full_name }}</h2>
+                        <p><strong>Username:</strong> {{ user.username }}</p>
+                        <p><strong>University:</strong> {{ user.university }}</p>
+                        <p><strong>Email:</strong> {{ user.email }}</p>
+                        <p><strong>Bio:</strong> {{ user.bio }}</p>
+                    </div>
+                </div>
+                <div class="social-media-links">
+                    <a href="{{ user.facebook_link }}" class="social-btn facebook" target="_blank">Facebook</a>
+                    <a href="{{ user.twitter_link }}" class="social-btn twitter" target="_blank">Twitter</a>
+                    <a href="{{ user.linkedin_link }}" class="social-btn linkedin" target="_blank">LinkedIn</a>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
