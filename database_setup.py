@@ -19,7 +19,7 @@ def create_tables():
             facebook_link TEXT,
             twitter_link TEXT,
             linkedin_link TEXT,
-            is_verified INTEGER DEFAULT 1
+            is_verified INTEGER DEFAULT 0  -- Updated to default to 0 (not verified)
         )
     ''')
 
@@ -39,7 +39,8 @@ def create_tables():
             user_id INTEGER NOT NULL,
             friend_id INTEGER NOT NULL,
             FOREIGN KEY (user_id) REFERENCES users (id),
-            FOREIGN KEY (friend_id) REFERENCES users (id)
+            FOREIGN KEY (friend_id) REFERENCES users (id),
+            UNIQUE (user_id, friend_id)  -- Ensure no duplicate friendships
         )
     ''')
 
@@ -49,9 +50,10 @@ def create_tables():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             sender_id INTEGER NOT NULL,
             receiver_id INTEGER NOT NULL,
-            status TEXT DEFAULT 'pending',
+            status TEXT DEFAULT 'pending' CHECK(status IN ('pending', 'accepted', 'rejected')),
             FOREIGN KEY (sender_id) REFERENCES users (id),
-            FOREIGN KEY (receiver_id) REFERENCES users (id)
+            FOREIGN KEY (receiver_id) REFERENCES users (id),
+            UNIQUE (sender_id, receiver_id)  -- Ensure no duplicate friend requests
         )
     ''')
 
@@ -60,5 +62,4 @@ def create_tables():
 
 if __name__ == '__main__':
     create_tables()
-
-print("Database Created")
+    print("Database Created")

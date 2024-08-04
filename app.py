@@ -53,11 +53,12 @@ def register():
         university = request.form['university']
         email = request.form['email']
         password = request.form['password']
-        profile_picture = request.files['profile_picture']
+        profile_picture = request.files.get('profile_picture')
 
-        # Check if the ID is valid and not registered
         conn = get_db_connection()
         cur = conn.cursor()
+
+        # Check if the ID is valid and not registered
         cur.execute("SELECT * FROM ids WHERE unique_id = ? AND is_registered = 0", (unique_id,))
         id_entry = cur.fetchone()
 
@@ -159,7 +160,7 @@ def profile():
         facebook_link = request.form.get('facebook_link', '')
         twitter_link = request.form.get('twitter_link', '')
         linkedin_link = request.form.get('linkedin_link', '')
-        profile_picture = request.files['profile_picture']
+        profile_picture = request.files.get('profile_picture')
 
         cur.execute("SELECT * FROM users WHERE id = ?", (session['user_id'],))
         user = cur.fetchone()
@@ -294,7 +295,7 @@ def view_all_ids():
 
 @app.route('/search_friends', methods=['GET', 'POST'])
 def search_friends():
-    """Allow users to search for friends."""
+    """Allow users to search for friends by username or unique ID."""
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
@@ -306,7 +307,11 @@ def search_friends():
         
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute("SELECT * FROM users WHERE username LIKE ?", ('%' + search_query + '%',))
+        # Search by username or unique ID
+        cur.execute("""
+            SELECT * FROM users 
+            WHERE username LIKE ? OR unique_id LIKE ?
+        """, ('%' + search_query + '%', '%' + search_query + '%'))
         users = cur.fetchall()
         conn.close()
 

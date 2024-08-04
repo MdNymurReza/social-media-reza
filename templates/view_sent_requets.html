@@ -4,16 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sent Friend Requests</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/sent_requests.css') }}">
 </head>
 <body>
-    <h1>Sent Friend Requests</h1>
-    <ul>
-        {% for request in sent_requests %}
-            <li>
-                To: {{ request.receiver_id }} - Status: Sent
-            </li>
-        {% endfor %}
-    </ul>
-    <a href="{{ url_for('user_dashboard') }}">Back to Dashboard</a>
+    <div class="container">
+        <header class="header">
+            <h1>Sent Friend Requests</h1>
+            <a href="{{ url_for('user_dashboard') }}" class="back-btn">Back to Dashboard</a>
+        </header>
+        <div class="requests-list">
+            <ul>
+                {% for request in sent_requests %}
+                    <li>
+                        To: {{ request.receiver_id }} - Status: Sent
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
 </body>
 </html>
