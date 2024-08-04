@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sent Friend Requests</title>
+</head>
+<body>
+    <h1>Sent Friend Requests</h1>
+    <ul>
+        {% for request in sent_requests %}
+            <li>
+                To: {{ request.receiver_id }} - Status: Sent
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('user_dashboard') }}">Back to Dashboard</a>
+</body>
+</html>

@@ -75,10 +75,6 @@ body {
 .requests-list tr:nth-child(even) {
     background-color: #f2f2f2;
 }
-/* 
-.requests-list tr:hover {
-    background-color: #e8f4f8;
-} */
 
 /* Action Buttons */
 .action-btn {

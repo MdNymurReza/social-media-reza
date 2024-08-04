@@ -292,52 +292,146 @@ def view_all_ids():
 
     return render_template('view_all_ids.html', all_ids=all_ids)
 
+@app.route('/search_friends', methods=['GET', 'POST'])
+def search_friends():
+    """Allow users to search for friends."""
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    search_query = ''
+    users = []
+
+    if request.method == 'POST':
+        search_query = request.form['search_query']
+        
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM users WHERE username LIKE ?", ('%' + search_query + '%',))
+        users = cur.fetchall()
+        conn.close()
+
+    return render_template('search_friends.html', users=users, search_query=search_query)
+
+@app.route('/send_friend_request/<int:receiver_id>', methods=['POST'])
+def send_friend_request(receiver_id):
+    """Send a friend request to another user."""
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    sender_id = session['user_id']
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    # Check if a request already exists
+    cur.execute("SELECT * FROM friend_requests WHERE sender_id = ? AND receiver_id = ?", (sender_id, receiver_id))
+    existing_request = cur.fetchone()
+
+    if existing_request:
+        flash('Friend request already sent.', 'info')
+    else:
+        cur.execute("INSERT INTO friend_requests (sender_id, receiver_id) VALUES (?, ?)", (sender_id, receiver_id))
+        conn.commit()
+        flash('Friend request sent!', 'success')
+
+    conn.close()
+    return redirect(url_for('search_friends'))
+
 @app.route('/view_friends')
 def view_friends():
-    """Render a page to view friends."""
+    """View all friends of the logged-in user."""
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute('SELECT * FROM friends WHERE user_id = ?', (session['user_id'],))
+    cur.execute('''
+        SELECT u.id, u.full_name, u.username
+        FROM friends f
+        JOIN users u ON (f.user_id = u.id OR f.friend_id = u.id)
+        WHERE (f.user_id = ? OR f.friend_id = ?) AND u.id != ?
+    ''', (session['user_id'], session['user_id'], session['user_id']))
     friends = cur.fetchall()
     conn.close()
 
     return render_template('view_friends.html', friends=friends)
 
-@app.route('/search_users', methods=['GET', 'POST'])
-def search_users():
-    """Allow users to search for other users."""
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
-
-    search_query = ''
-    if request.method == 'POST':
-        search_query = request.form['search_query']
-
-    conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM users WHERE username LIKE ?", ('%' + search_query + '%',))
-    users = cur.fetchall()
-    conn.close()
-
-    return render_template('search_users.html', users=users, search_query=search_query)
-
 @app.route('/view_received_requests')
 def view_received_requests():
-    """Render a page to view received friend requests."""
+    """View all received friend requests."""
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute('SELECT * FROM friend_requests WHERE receiver_id = ?', (session['user_id'],))
-    received_requests = cur.fetchall()
+    cur.execute('''
+        SELECT u.id, u.full_name, u.username, fr.id as request_id
+        FROM friend_requests fr
+        JOIN users u ON fr.sender_id = u.id
+        WHERE fr.receiver_id = ? AND fr.status = 'pending'
+    ''', (session['user_id'],))
+    requests = cur.fetchall()
     conn.close()
 
-    return render_template('view_received_requests.html', received_requests=received_requests)
+    return render_template('view_received_requests.html', requests=requests)
 
+@app.route('/accept_friend_request/<int:request_id>')
+def accept_friend_request(request_id):
+    """Accept a friend request."""
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    # Update the request status to 'accepted'
+    cur.execute('''
+        UPDATE friend_requests
+        SET status = 'accepted'
+        WHERE id = ? AND receiver_id = ?
+    ''', (request_id, session['user_id']))
+
+    # Get the sender ID
+    cur.execute('''
+        SELECT sender_id
+        FROM friend_requests
+        WHERE id = ?
+    ''', (request_id,))
+    sender_id = cur.fetchone()['sender_id']
+
+    # Add each other to the friends table
+    cur.execute('''
+        INSERT INTO friends (user_id, friend_id)
+        VALUES (?, ?), (?, ?)
+    ''', (session['user_id'], sender_id, sender_id, session['user_id']))
+
+    conn.commit()
+    conn.close()
+
+    flash('Friend request accepted!', 'success')
+    return redirect(url_for('view_received_requests'))
+
+@app.route('/reject_friend_request/<int:request_id>')
+def reject_friend_request(request_id):
+    """Reject a friend request."""
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    # Update the request status to 'rejected'
+    cur.execute('''
+        UPDATE friend_requests
+        SET status = 'rejected'
+        WHERE id = ? AND receiver_id = ?
+    ''', (request_id, session['user_id']))
+
+    conn.commit()
+    conn.close()
+
+    flash('Friend request rejected!', 'info')
+    return redirect(url_for('view_received_requests'))
 
 if __name__ == '__main__':
     app.run(debug=True)

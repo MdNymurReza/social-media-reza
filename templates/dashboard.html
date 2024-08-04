@@ -12,14 +12,14 @@
             <a href="{{ url_for('profile') }}" class="sidebar-link">Edit Profile</a>
             <a href="{{ url_for('view_friends') }}" class="sidebar-link">View Friends</a>
             <a href="{{ url_for('view_received_requests') }}" class="sidebar-link">View Friend Requests</a>            
-            
+            <a href="{{ url_for('search_friends') }}" class="sidebar-link">Search Friends</a>
             <a href="{{ url_for('logout') }}" class="sidebar-link logout-btn">Logout</a>
         </aside>
         <main class="main-content">
             <header class="header">
                 <h1>User Dashboard</h1>
             </header>
-            <div class="profile">
+            <section class="profile">
                 <div class="profile-header">
                     <img src="{{ url_for('static', filename='uploads/' ~ user.profile_picture) }}" alt="Profile Picture" class="profile-picture">
                     <div class="profile-info">
@@ -31,11 +31,11 @@
                     </div>
                 </div>
                 <div class="social-media-links">
-                    <a href="{{ user.facebook_link }}" class="social-btn facebook" target="_blank">Facebook</a>
-                    <a href="{{ user.twitter_link }}" class="social-btn twitter" target="_blank">Twitter</a>
-                    <a href="{{ user.linkedin_link }}" class="social-btn linkedin" target="_blank">LinkedIn</a>
+                    <a href="{{ user.facebook_link }}" class="social-btn facebook" target="_blank" rel="noopener noreferrer">Facebook</a>
+                    <a href="{{ user.twitter_link }}" class="social-btn twitter" target="_blank" rel="noopener noreferrer">Twitter</a>
+                    <a href="{{ user.linkedin_link }}" class="social-btn linkedin" target="_blank" rel="noopener noreferrer">LinkedIn</a>
                 </div>
-            </div>
+            </section>
         </main>
     </div>
 </body>

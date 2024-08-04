@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Friends</title>
+</head>
+<body>
+    <h1>Search Friends</h1>
+    <form method="POST" action="{{ url_for('search_friends') }}">
+        <input type="text" name="search_query" placeholder="Search friends" value="{{ search_query }}">
+        <button type="submit">Search</button>
+    </form>
+
+    {% if friends %}
+        <h2>Search Results:</h2>
+        <ul>
+            {% for friend in friends %}
+                <li>{{ friend.username }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No friends found.</p>
+    {% endif %}
+</body>
+</html>

@@ -23,14 +23,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for request in requests %}
+                    {% for request in received_requests %}
                     <tr>
                         <td>{{ request.sender_id }}</td>
                         <td>{{ request.full_name }}</td>
                         <td>{{ request.username }}</td>
                         <td>
-                            <a href="{{ url_for('accept_friend_request', request_id=request.id) }}" class="action-btn accept">Accept</a>
-                            <a href="{{ url_for('reject_friend_request', request_id=request.id) }}" class="action-btn reject">Reject</a>
+                            <a href="{{ url_for('accept_request', request_id=request.id) }}" class="action-btn accept">Accept</a>
+                            <a href="{{ url_for('reject_request', request_id=request.id) }}" class="action-btn reject">Reject</a>
                         </td>
                     </tr>
                     {% endfor %}
